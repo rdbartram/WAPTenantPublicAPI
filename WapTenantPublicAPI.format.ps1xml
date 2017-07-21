@@ -2,11 +2,11 @@
 <Configuration>
     <ViewDefinitions>
         <View>
-          <Name>WAP.Subscription</Name>
+            <Name>WAP.Subscription</Name>
             <ViewSelectedBy>
                 <TypeName>WAP.Subscription</TypeName>
             </ViewSelectedBy>
-             <ListControl>
+            <ListControl>
                 <ListEntries>
                     <ListEntry>
                         <ListItems>
@@ -24,37 +24,35 @@
                 </ListEntries>
             </ListControl>
         </View>
-
         <View>
-          <Name>WAP.VMRoleSizeProfile</Name>
+            <Name>WAP.VMRoleSizeProfile</Name>
             <ViewSelectedBy>
-              <TypeName>WAP.VMRoleSizeProfile</TypeName>
+                <TypeName>WAP.VMRoleSizeProfile</TypeName>
             </ViewSelectedBy>
-          <ListControl>
-            <ListEntries>
-              <ListEntry>
-                <ListItems>
-                  <ListItem>
-                    <PropertyName>Name</PropertyName>
-                  </ListItem>
-                  <ListItem>
-                    <PropertyName>CpuCount</PropertyName>
-                  </ListItem>
-                  <ListItem>
-                    <PropertyName>MemoryInMB</PropertyName>
-                  </ListItem>
-                </ListItems>
-              </ListEntry>
-            </ListEntries>
-          </ListControl>
+            <ListControl>
+                <ListEntries>
+                    <ListEntry>
+                        <ListItems>
+                            <ListItem>
+                                <PropertyName>Name</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>CpuCount</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>MemoryInMB</PropertyName>
+                            </ListItem>
+                        </ListItems>
+                    </ListEntry>
+                </ListEntries>
+            </ListControl>
         </View>
-
-      <View>
-          <Name>MicrosoftCompute.VMRoleGalleryItem</Name>
+        <View>
+            <Name>MicrosoftCompute.VMRoleGalleryItem</Name>
             <ViewSelectedBy>
                 <TypeName>MicrosoftCompute.VMRoleGalleryItem</TypeName>
             </ViewSelectedBy>
-             <ListControl>
+            <ListControl>
                 <ListEntries>
                     <ListEntry>
                         <ListItems>
@@ -72,19 +70,18 @@
                             </ListItem>
                             <ListItem>
                                 <PropertyName>PublishDate</PropertyName>
-                            </ListItem> 
+                            </ListItem>
                         </ListItems>
                     </ListEntry>
                 </ListEntries>
             </ListControl>
         </View>
-
         <View>
             <Name>WAP.VMRole</Name>
             <ViewSelectedBy>
                 <TypeName>WAP.VMRole</TypeName>
             </ViewSelectedBy>
-             <ListControl>
+            <ListControl>
                 <ListEntries>
                     <ListEntry>
                         <ListItems>
@@ -99,13 +96,12 @@
                 </ListEntries>
             </ListControl>
         </View>
-
         <View>
             <Name>WAP.GI.OSDisk</Name>
             <ViewSelectedBy>
                 <TypeName>WAP.GI.OSDisk</TypeName>
             </ViewSelectedBy>
-             <ListControl>
+            <ListControl>
                 <ListEntries>
                     <ListEntry>
                         <ListItems>
@@ -129,13 +125,12 @@
                 </ListEntries>
             </ListControl>
         </View>
-
         <View>
             <Name>WAP.VMNetwork</Name>
             <ViewSelectedBy>
                 <TypeName>WAP.VMNetwork</TypeName>
             </ViewSelectedBy>
-             <ListControl>
+            <ListControl>
                 <ListEntries>
                     <ListEntry>
                         <ListItems>
@@ -153,13 +148,12 @@
                 </ListEntries>
             </ListControl>
         </View>
-        
         <View>
             <Name>WAP.VMTemplate</Name>
             <ViewSelectedBy>
                 <TypeName>WAP.VMTemplate</TypeName>
             </ViewSelectedBy>
-             <ListControl>
+            <ListControl>
                 <ListEntries>
                     <ListEntry>
                         <ListItems>
@@ -183,13 +177,12 @@
                 </ListEntries>
             </ListControl>
         </View>
-
         <View>
             <Name>WAP.CloudService</Name>
             <ViewSelectedBy>
                 <TypeName>WAP.CloudService</TypeName>
             </ViewSelectedBy>
-             <ListControl>
+            <ListControl>
                 <ListEntries>
                     <ListEntry>
                         <ListItems>
@@ -207,13 +200,12 @@
                 </ListEntries>
             </ListControl>
         </View>
-        
         <View>
             <Name>WAP.VM</Name>
             <ViewSelectedBy>
                 <TypeName>WAP.VM</TypeName>
             </ViewSelectedBy>
-             <ListControl>
+            <ListControl>
                 <ListEntries>
                     <ListEntry>
                         <ListItems>
@@ -231,93 +223,118 @@
                 </ListEntries>
             </ListControl>
         </View>
-
         <View>
-          <Name>WAP.LogicalNetwork</Name>
-          <ViewSelectedBy>
-            <TypeName>WAP.LogicalNetwork</TypeName>
-          </ViewSelectedBy>
-          <ListControl>
-            <ListEntries>
-              <ListEntry>
-                <ListItems>
-                  <ListItem>
-                    <PropertyName>Name</PropertyName>
-                  </ListItem>
-                  <ListItem>
-                    <PropertyName>Description</PropertyName>
-                  </ListItem>
-                  <ListItem>
-                    <PropertyName>NetworkVirtualizationEnabled</PropertyName>
-                  </ListItem>
-                </ListItems>
-              </ListEntry>
-            </ListEntries>
-          </ListControl>
+            <Name>WAP.LogicalNetwork</Name>
+            <ViewSelectedBy>
+                <TypeName>WAP.LogicalNetwork</TypeName>
+            </ViewSelectedBy>
+            <ListControl>
+                <ListEntries>
+                    <ListEntry>
+                        <ListItems>
+                            <ListItem>
+                                <PropertyName>Name</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Description</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>NetworkVirtualizationEnabled</PropertyName>
+                            </ListItem>
+                        </ListItems>
+                    </ListEntry>
+                </ListEntries>
+            </ListControl>
         </View>
-
-      <View>
-        <Name>WAP.Subnet</Name>
-        <ViewSelectedBy>
-          <TypeName>WAP.Subnet</TypeName>
-        </ViewSelectedBy>
-        <ListControl>
-          <ListEntries>
-            <ListEntry>
-              <ListItems>
-                <ListItem>
-                  <PropertyName>Name</PropertyName>
-                </ListItem>
-                <ListItem>
-                  <PropertyName>Subnet</PropertyName>
-                </ListItem>
-                <ListItem>
-                  <PropertyName>VMNetworkName</PropertyName>
-                </ListItem>
-              </ListItems>
-            </ListEntry>
-          </ListEntries>
-        </ListControl>
-      </View>
-
-      <View>
-        <Name>WAP.IPPool</Name>
-        <ViewSelectedBy>
-          <TypeName>WAP.IPPool</TypeName>
-        </ViewSelectedBy>
-        <ListControl>
-          <ListEntries>
-            <ListEntry>
-              <ListItems>
-                <ListItem>
-                  <PropertyName>Name</PropertyName>
-                </ListItem>
-                <ListItem>
-                  <PropertyName>Subnet</PropertyName>
-                </ListItem>
-                <ListItem>
-                  <PropertyName>DNSServers</PropertyName>
-                </ListItem>
-                <ListItem>
-                  <PropertyName>DNSSuffix</PropertyName>
-                </ListItem>
-                <ListItem>
-                  <PropertyName>IPAddressRangeStart</PropertyName>
-                </ListItem>
-                <ListItem>
-                  <PropertyName>IPAddressRangeEnd</PropertyName>
-                </ListItem>
-                <ListItem>
-                  <PropertyName>Description</PropertyName>
-                </ListItem>
-                <ListItem>
-                  <PropertyName>AvailableAddresses</PropertyName>
-                </ListItem>
-              </ListItems>
-            </ListEntry>
-          </ListEntries>
-        </ListControl>
-      </View>
-      
+        <View>
+            <Name>WAP.Subnet</Name>
+            <ViewSelectedBy>
+                <TypeName>WAP.Subnet</TypeName>
+            </ViewSelectedBy>
+            <ListControl>
+                <ListEntries>
+                    <ListEntry>
+                        <ListItems>
+                            <ListItem>
+                                <PropertyName>Name</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Subnet</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>VMNetworkName</PropertyName>
+                            </ListItem>
+                        </ListItems>
+                    </ListEntry>
+                </ListEntries>
+            </ListControl>
+        </View>
+        <View>
+            <Name>WAP.IPPool</Name>
+            <ViewSelectedBy>
+                <TypeName>WAP.IPPool</TypeName>
+            </ViewSelectedBy>
+            <ListControl>
+                <ListEntries>
+                    <ListEntry>
+                        <ListItems>
+                            <ListItem>
+                                <PropertyName>Name</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Subnet</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>DNSServers</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>DNSSuffix</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>IPAddressRangeStart</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>IPAddressRangeEnd</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Description</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>AvailableAddresses</PropertyName>
+                            </ListItem>
+                        </ListItems>
+                    </ListEntry>
+                </ListEntries>
+            </ListControl>
+        </View>
+        <View>
+            <Name>WAP.HardwareProfile</Name>
+            <ViewSelectedBy>
+                <TypeName>WAP.HardwareProfile</TypeName>
+            </ViewSelectedBy>
+            <ListControl>
+                <ListEntries>
+                    <ListEntry>
+                        <ListItems>
+                            <ListItem>
+                                <PropertyName>Name</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Memory</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>CPUCount</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>OperatingSystem</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <PropertyName>Generation</PropertyName>
+                            </ListItem>
+                        </ListItems>
+                    </ListEntry>
+                </ListEntries>
+            </ListControl>
+        </View>
     </ViewDefinitions>
 </Configuration>

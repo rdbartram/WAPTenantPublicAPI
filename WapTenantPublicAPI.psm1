@@ -1565,6 +1565,103 @@ function Grant-WAPVMNetworkAccess {
     }
 }
 
+function Set-WAPVMNetwork {
+
+    <#
+
+    .SYNOPSIS
+
+        Sets subscription available VM Networks from Azure Pack TenantPublic or Tenant API.
+
+    .PARAMETER VMNetwork
+
+        When VMNetwork is specified, only that VM Network is returned.
+
+    .PARAMETER Name
+
+        When Name is specified, the VM Network is set with said Name.
+
+    .PARAMETER Description
+
+        When Description is specified, the VM Network is set with said Description.
+
+
+
+    .EXAMPLE
+
+        PS C:\>$URL = 'https://publictenantapi.mydomain.com'
+
+        PS C:\>$creds = Get-Credential
+
+        PS C:\>Get-WAPToken -Credential $creds -URL 'https://sts.adfs.com' -ADFS
+
+        PS C:\>Connect-WAPAPI -URL $URL
+
+        PS C:\>Get-WAPSubscription -Name 'MySubscription' | Select-WAPSubscription
+
+        PS C:\>$WAPNet | Set-WAPVMNetwork -Name "MyNewName"
+
+
+
+        This will fetch all VM Networks available to the subscription.
+
+    #>
+
+    [CmdletBinding()]
+    param (
+        [parameter()]
+        [ValidateNotNullOrEmpty()]
+        [System.Management.Automation.PSTypeName('WAP.VMNetwork')] $VMNetwork,
+
+        [parameter()]
+        [ValidateNotNullOrEmpty()]
+        [String] $Name,
+
+        [parameter()]
+        [ValidateNotNullOrEmpty()]
+        [String] $Description
+    )
+
+    process {
+        try {
+            if ($IgnoreSSL) {
+                Write-Warning -Message 'IgnoreSSL defined by Connect-WAPAPI, Certificate errors will be ignored!'
+                #Change Certificate Policy to ignore
+                IgnoreSSL
+            }
+
+            PreFlight -IncludeConnection -IncludeSubscription
+
+            $URI = '{0}:{1}/{2}/services/systemcenter/vmm/VMNetworks(ID=guid''{3}'',StampId=guid''{4}'')' -f $PublicTenantAPIUrl, $Port, $Subscription.SubscriptionId, $VMNetwork.id, $VMNetwork.stampid
+
+            Write-Verbose -Message "Constructed VM Networks URI: $URI"
+
+            if ($PSBoundParameters.ContainsKey("Name")) {
+                $VMNetwork.Name = $Name 
+            }
+
+            if ($PSBoundParameters.ContainsKey("Description")) {
+                $VMNetwork.Description = $Description 
+            }
+            
+            Invoke-RestMethod -Uri $URI -Headers $Headers -Method Put -Body (ConvertTo-Json $VMNetwork)  -ContentType application/json
+
+        }
+        catch {
+            Write-Error -ErrorRecord $_
+        }
+        finally {
+            #Change Certificate Policy to the original
+            if ($IgnoreSSL) {
+                [System.Net.ServicePointManager]::CertificatePolicy = $OriginalCertificatePolicy
+            }
+
+        }
+
+    }
+
+}
+
 function Remove-WAPVMNetwork {
     <#
     .SYNOPSIS
@@ -2659,6 +2756,48 @@ function Get-WAPVMTemplate {
     }
 }
 
+function Get-WAPHardwareProfile {
+    [CmdletBinding(DefaultParameterSetName = 'List')]
+    [OutputType([PSCustomObject])]
+    param (
+        [Parameter(Mandatory, ParameterSetName = 'Name')]
+        [ValidateNotNullOrEmpty()]
+        [String] $Name
+    )
+    process {
+        try {
+            if ($IgnoreSSL) {
+                Write-Warning -Message 'IgnoreSSL defined by Connect-WAPAPI, Certificate errors will be ignored!'
+                #Change Certificate Policy to ignore
+                IgnoreSSL
+            }
+
+            PreFlight -IncludeConnection -IncludeSubscription
+
+            $URI = '{0}:{1}/{2}/services/systemcenter/vmm/HardwareProfiles' -f $script:PublicTenantAPIUrl, $script:Port, $script:Subscription.SubscriptionId
+            Write-Verbose -Message "Constructed VMTemplate Item URI: $URI"
+
+            $TemplateItems = Invoke-RestMethod -Uri $URI -Headers $Headers -Method Get
+            foreach ($T in $TemplateItems.value) {
+                if ($PSCmdlet.ParameterSetName -eq 'Name' -and $T.Name -ne $Name) {
+                    continue
+                }
+                $T.PSObject.TypeNames.Insert(0, 'WAP.HardwareProfile')
+                Write-Output -InputObject $T 
+            }
+        }
+        catch {
+            Write-Error -ErrorRecord $_
+        }
+        finally {
+            #Change Certificate Policy to the original
+            if ($IgnoreSSL) {
+                [System.Net.ServicePointManager]::CertificatePolicy = $OriginalCertificatePolicy
+            }
+        }
+    }
+}
+
 function New-WAPVM {
     [CmdletBinding(SupportsShouldProcess)]
     param (
@@ -2674,6 +2813,22 @@ function New-WAPVM {
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
         [String] $Name,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [String] $ComputerName = $Name,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        $HWProfile,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [int32] $CPU,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [int32] $Memory,
 
         [Parameter(Mandatory)]
         [PSCredential] $Credential,
@@ -2705,7 +2860,7 @@ function New-WAPVM {
                 Name = $Name
                 CloudId = $Cloud.Id
                 VMTemplateId = $Template.ID
-                ComputerName = $Name
+                ComputerName = $ComputerName
                 LocalAdminUserName = $Credential.UserName
                 LocalAdminPassword = $Credential.GetNetworkCredential().Password
                 NewVirtualNetworkAdapterInput = @(
@@ -2713,6 +2868,18 @@ function New-WAPVM {
                         VMNetworkName  = $VMNetwork.Name
                     }
                 )
+            }
+
+            if ($HWProfile) {
+                $Body.add("HardwareProfileId", $HWProfile.id)
+            }
+
+            if ($CPU) {
+                $Body.add("CPUCount", $CPU)
+            }
+
+            if ($Memory) {
+                $Body.add("Memory", $Memory)
             }
 
             if ($StartVM) {
@@ -2734,6 +2901,68 @@ function New-WAPVM {
         } catch {
             Write-Error -ErrorRecord $_
         } finally {
+            #Change Certificate Policy to the original
+            if ($IgnoreSSL) {
+                [System.Net.ServicePointManager]::CertificatePolicy = $OriginalCertificatePolicy
+            }
+        }
+    }
+}
+
+function Set-WAPVM {
+    [CmdletBinding(SupportsShouldProcess)]
+    param (
+        [Parameter(Mandatory,
+            ValueFromPipeline)]
+        [ValidateNotNull()]
+        [PSCustomObject] $VM,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [int32] $CPU,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [int32] $Memory,
+
+        [Switch] $RunAsynchronously
+    )
+    process {
+        try {
+            if ($script:IgnoreSSL) {
+                Write-Warning -Message 'IgnoreSSL defined by Connect-WAPAPI, Certificate errors will be ignored!'
+                #Change Certificate Policy to ignore
+                IgnoreSSL
+            }
+
+            $URI = '{0}:{1}/{2}/services/systemcenter/vmm/VirtualMachines(ID=guid''{3}'',StampId=guid''{4}'')' -f $PublicTenantAPIUrl, $Port, $Subscription.SubscriptionId, $VM.ID, $VM.StampId
+            Write-Verbose -Message "Constructed VM Deploy URI: $URI"
+            #https://msdn.microsoft.com/en-us/library/jj643289.aspx
+            #https://msdn.microsoft.com/en-us/library/dn470013.aspx
+            
+            $Body = @{
+            }
+
+            if ($CPU) {
+                $Body.add("CPUCount", $CPU)
+            }
+
+            if ($Memory) {
+                $Body.add("Memory", $Memory)
+            }
+            
+            $Body = $Body | ConvertTo-Json -Depth 100
+
+            Write-Verbose -Message "Constructed body: $($Body | Out-String)"
+
+            if ($PSCmdlet.ShouldProcess($Name)) {
+                $VM = Invoke-RestMethod -Uri $URI -Headers $Headers -Method Merge -Body $Body -ContentType application/json
+            }
+        }
+        catch {
+            Write-Error -ErrorRecord $_
+        }
+        finally {
             #Change Certificate Policy to the original
             if ($IgnoreSSL) {
                 [System.Net.ServicePointManager]::CertificatePolicy = $OriginalCertificatePolicy
