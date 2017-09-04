@@ -1599,18 +1599,17 @@ function Set-WAPVMNetwork {
 
         PS C:\>Get-WAPSubscription -Name 'MySubscription' | Select-WAPSubscription
 
-        PS C:\>$WAPNet | Set-WAPVMNetwork -Name "MyNewName"
+        PS C:\>Get-WAPNetwork -Name 'OldNetworkName' | Set-WAPVMNetwork -Name "MyNewName"
 
 
 
-        This will fetch all VM Networks available to the subscription.
+        This will fetch update the network OldNetworkName and set the name to MyNewName.
 
     #>
 
     [CmdletBinding()]
     param (
-        [parameter()]
-        [ValidateNotNullOrEmpty()]
+        [parameter(ValueFromPipeline, Mandatory)]
         [System.Management.Automation.PSTypeName('WAP.VMNetwork')] $VMNetwork,
 
         [parameter()]
@@ -1631,6 +1630,10 @@ function Set-WAPVMNetwork {
             }
 
             PreFlight -IncludeConnection -IncludeSubscription
+
+            if(($PSBoundParameters.ContainsKey("Name") -and $VMNetwork.Name -eq $Name) -and ($PSBoundParameters.ContainsKey("Description") -and $VMNetwork.Description -eq $Description)) {
+                Write-Warning "The changes request will not result in any updates. Please review inputs and try again."
+            }
 
             $URI = '{0}:{1}/{2}/services/systemcenter/vmm/VMNetworks(ID=guid''{3}'',StampId=guid''{4}'')' -f $PublicTenantAPIUrl, $Port, $Subscription.SubscriptionId, $VMNetwork.id, $VMNetwork.stampid
 
@@ -2819,16 +2822,14 @@ function New-WAPVM {
         [String] $ComputerName = $Name,
 
         [Parameter()]
-        [ValidateNotNullOrEmpty()]
+        [System.Management.Automation.PSTypeName('WAP.HardwareProfile')]
         $HWProfile,
 
         [Parameter()]
-        [ValidateNotNullOrEmpty()]
-        [int32] $CPU,
+        [uint32] $CPU,
 
         [Parameter()]
-        [ValidateNotNullOrEmpty()]
-        [int32] $Memory,
+        [uint32] $Memory,
 
         [Parameter(Mandatory)]
         [PSCredential] $Credential,
@@ -2870,15 +2871,15 @@ function New-WAPVM {
                 )
             }
 
-            if ($HWProfile) {
+            if ($PSBoundParameters.ContainsKey("HWProfile")) {
                 $Body.add("HardwareProfileId", $HWProfile.id)
             }
 
-            if ($CPU) {
+            if ($PSBoundParameters.ContainsKey("CPU")) {
                 $Body.add("CPUCount", $CPU)
             }
 
-            if ($Memory) {
+            if ($PSBoundParameters.ContainsKey("Memory")) {
                 $Body.add("Memory", $Memory)
             }
 
@@ -2918,12 +2919,10 @@ function Set-WAPVM {
         [PSCustomObject] $VM,
 
         [Parameter()]
-        [ValidateNotNullOrEmpty()]
-        [int32] $CPU,
+        [uint32] $CPU,
 
         [Parameter()]
-        [ValidateNotNullOrEmpty()]
-        [int32] $Memory,
+        [uint32] $Memory,
 
         [Switch] $RunAsynchronously
     )
@@ -2943,11 +2942,11 @@ function Set-WAPVM {
             $Body = @{
             }
 
-            if ($CPU) {
+            if ($PSBoundParameters.ContainsKey("CPU")) {
                 $Body.add("CPUCount", $CPU)
             }
 
-            if ($Memory) {
+            if ($PSBoundParameters.ContainsKey("Memory")) {
                 $Body.add("Memory", $Memory)
             }
             
